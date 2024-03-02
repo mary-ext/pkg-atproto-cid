@@ -10,7 +10,7 @@ const BASE32_CODES: Record<string, number> = /*#__PURE__*/ (() => {
 	return codes;
 })();
 
-export const decode = (str: string): Uint8Array => {
+export function decode(str: string): Uint8Array {
 	// Calculate padding
 	// let end = str.length;
 	// while (str[end - 1] === '=') {
@@ -49,9 +49,9 @@ export const decode = (str: string): Uint8Array => {
 	}
 
 	return out;
-};
+}
 
-export const encode = (data: Uint8Array): string => {
+export function encode(data: Uint8Array): string {
 	// const pad = BASE32_CHARSET[BASE32_CHARSET.length - 1] === '=';
 	const mask = (1 << BASE32_BITS) - 1;
 	let out = '';
@@ -84,4 +84,4 @@ export const encode = (data: Uint8Array): string => {
 	// }
 
 	return out;
-};
+}
