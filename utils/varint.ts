@@ -3,7 +3,17 @@ const REST = 0x7f;
 const MSBALL = ~REST;
 const INT = 2 ** 31;
 
-export const encode = (num: number, buf: Uint8Array, offset = 0): [buf: Uint8Array, written: number] => {
+const N1 = 2 ** 7;
+const N2 = 2 ** 14;
+const N3 = 2 ** 21;
+const N4 = 2 ** 28;
+const N5 = 2 ** 35;
+const N6 = 2 ** 42;
+const N7 = 2 ** 49;
+const N8 = 2 ** 56;
+const N9 = 2 ** 63;
+
+export function encode(num: number, buf: Uint8Array, offset = 0): [buf: Uint8Array, written: number] {
 	if (num > Number.MAX_SAFE_INTEGER) {
 		throw new RangeError('Could not encode varint');
 	}
@@ -22,9 +32,9 @@ export const encode = (num: number, buf: Uint8Array, offset = 0): [buf: Uint8Arr
 
 	buf[offset] = num | 0;
 	return [buf, offset - start + 1];
-};
+}
 
-export const decode = (buf: Uint8Array, offset = 0): [num: number, read: number] => {
+export function decode(buf: Uint8Array, offset = 0): [num: number, read: number] {
 	// deno-lint-ignore prefer-const
 	let l = buf.length;
 
@@ -44,19 +54,9 @@ export const decode = (buf: Uint8Array, offset = 0): [num: number, read: number]
 	} while (b >= MSB);
 
 	return [res, counter - offset];
-};
+}
 
-const N1 = 2 ** 7;
-const N2 = 2 ** 14;
-const N3 = 2 ** 21;
-const N4 = 2 ** 28;
-const N5 = 2 ** 35;
-const N6 = 2 ** 42;
-const N7 = 2 ** 49;
-const N8 = 2 ** 56;
-const N9 = 2 ** 63;
-
-export const encodingLength = (value: number): number => {
+export function encodingLength(value: number): number {
 	return value < N1
 		? 1
 		: value < N2
@@ -76,4 +76,4 @@ export const encodingLength = (value: number): number => {
 		: value < N9
 		? 9
 		: 10;
-};
+}
