@@ -11,7 +11,7 @@
 
 import * as varint from '@mary/varint';
 
-import * as base32 from './utils/base32.ts';
+import * as base32 from './base32.ts';
 
 /**
  * Raw digest information

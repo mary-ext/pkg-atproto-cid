@@ -1,7 +1,7 @@
 {
 	"name": "@mary/atproto-cid",
 	"version": "0.1.2",
-	"exports": "./mod.ts",
+	"exports": "./lib/mod.ts",
 	"imports": {
 		"@mary/varint": "jsr:@mary/varint@^0.1.0"
 	},
