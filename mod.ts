@@ -9,7 +9,8 @@
  * - Multihash: `sha-256` (0x12)
  */
 
-import * as varint from './utils/varint.ts';
+import * as varint from '@mary/varint';
+
 import * as base32 from './utils/base32.ts';
 
 /**
