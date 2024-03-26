@@ -48,19 +48,19 @@ export interface InspectedCID {
 /**
  * Parse a CID string
  */
-export function parse(cid: string): CID {
+export const parse = (cid: string): CID => {
 	if (cid[0] !== 'b') {
 		throw new Error(`only base32 cidv1 is supported`);
 	}
 
 	const bytes = base32.decode(cid.slice(1));
 	return decode(bytes);
-}
+};
 
 /**
  * Provides information regarding the CID buffer
  */
-export function inspect(initialBytes: Uint8Array): InspectedCID {
+export const inspect = (initialBytes: Uint8Array): InspectedCID => {
 	let offset = 0;
 	const next = (): number => {
 		const [i, length] = varint.decode(initialBytes.subarray(offset));
@@ -89,12 +89,12 @@ export function inspect(initialBytes: Uint8Array): InspectedCID {
 	const multihashSize = size - prefixSize;
 
 	return { version, codec, multihashCode, digestSize, multihashSize, size };
-}
+};
 
 /**
  * Decodes a CID buffer
  */
-export function decode(bytes: Uint8Array): CID {
+export const decode = (bytes: Uint8Array): CID => {
 	const specs = inspect(bytes);
 	const prefixSize = specs.size - specs.multihashSize;
 	const multihashBytes = bytes.subarray(prefixSize, prefixSize + specs.multihashSize);
@@ -120,12 +120,12 @@ export function decode(bytes: Uint8Array): CID {
 	};
 
 	return cid;
-}
+};
 
 /**
  * Creates a CID
  */
-export async function create(code: number, input: Uint8Array): Promise<CID> {
+export const create = async (code: number, input: Uint8Array): Promise<CID> => {
 	const digest = createDigest(0x12, new Uint8Array(await crypto.subtle.digest('sha-256', input)));
 	const bytes = encodeCID(1, code, digest.bytes);
 
@@ -135,16 +135,16 @@ export async function create(code: number, input: Uint8Array): Promise<CID> {
 		digest: digest,
 		bytes: bytes,
 	};
-}
+};
 
 /**
  * Serialize CID into a string
  */
-export function format(cid: CID): string {
+export const format = (cid: CID): string => {
 	return 'b' + base32.encode(cid.bytes);
-}
+};
 
-function createDigest(code: number, digest: Uint8Array): Digest {
+const createDigest = (code: number, digest: Uint8Array): Digest => {
 	const size = digest.byteLength;
 	const sizeOffset = varint.encodingLength(code);
 	const digestOffset = sizeOffset + varint.encodingLength(size);
@@ -160,9 +160,9 @@ function createDigest(code: number, digest: Uint8Array): Digest {
 		digest: digest,
 		bytes: bytes,
 	};
-}
+};
 
-function encodeCID(version: number, code: number, multihash: Uint8Array): Uint8Array {
+const encodeCID = (version: number, code: number, multihash: Uint8Array): Uint8Array => {
 	const codeOffset = varint.encodingLength(version);
 	const hashOffset = codeOffset + varint.encodingLength(code);
 
@@ -172,4 +172,4 @@ function encodeCID(version: number, code: number, multihash: Uint8Array): Uint8A
 	bytes.set(multihash, hashOffset);
 
 	return bytes;
-}
+};
