@@ -9,9 +9,8 @@
  * - Multihash: `sha-256` (0x12)
  */
 
+import * as base32 from '@mary/base32';
 import * as varint from '@mary/varint';
-
-import * as base32 from './base32.ts';
 
 /**
  * Raw digest information
